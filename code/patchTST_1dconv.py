@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from einops import rearrange
 
 from x_transformers import Encoder
@@ -16,7 +15,7 @@ class Embedding(nn.Module):
 
         if mode == "linear":
             self.embedding = nn.Sequential(
-                nn.Liner(input_size, embedding_dim),
+                nn.Linear(input_size, embedding_dim),
                 nn.LayerNorm(embedding_dim)
             )
         
@@ -34,11 +33,11 @@ class Embedding(nn.Module):
         if self.mode == "cnn":
             batch_size, num_channels, seq_len, patch_len = x.shape
             x = rearrange(x, 'b c s p -> (b c s) 1 p')
-            x = self.embed(x)
+            x = self.embedding(x)
             x = rearrange(x, '(b c s) e p -> b c s (e p)', b=batch_size, c=num_channels, s=seq_len)
             return x    
         
-        return self.embed(x)
+        return self.embedding(x)
     
 
 class PatchTSTEncoder(nn.Module):
@@ -72,9 +71,8 @@ class PatchTSTEncoder(nn.Module):
         return x 
 
     def forward(self, x):
-        
         x = self.patchify(x)
-        x = self.embed(x)
+        x = self.embedding(x)
         x = rearrange(x, 'b c num_patch emb_dim -> (b c) num_patch emb_dim') # Reshape for transformer so that channels are passed independently
 
         x = x + self.pe # Add positional encoding
