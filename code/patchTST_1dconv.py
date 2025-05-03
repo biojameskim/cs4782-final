@@ -61,7 +61,7 @@ class PatchTSTEncoder(nn.Module):
             dim = embedding_dim,
             depth = depth,
             heads = heads,
-            dropout = self.dropout,
+            #dropout = self.dropout, # I think package might have been updated since original code, cause this is no longer an argument
             sandwich_norm = True
         )
 

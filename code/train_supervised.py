@@ -74,8 +74,9 @@ class patchTST(pl.LightningModule):
         self.embed_mode = embed_mode
         self.use_4782 = use_4782
         if use_4782: #use our implementation or the original from the paper
-            self.model = PatchTST_4782(seq_len, num_channels, embed_dim, heads, depth, target_seq_size, patch_len, dropout,
-                              embed_strat, decay, ema, residual, embed_mode)
+            self.model = PatchTST_4782(seq_len, num_channels, embed_dim, heads, depth, target_seq_size, patch_len=patch_len, dropout=dropout, 
+                              embed_mode=embed_mode)
+
         else:
             self.model = PatchTST(seq_len, num_channels, embed_dim, heads, depth, target_seq_size, patch_len, dropout, 
                               embed_strat, decay, ema, residual, embed_mode)
@@ -190,7 +191,7 @@ if __name__ == '__main__':
                 "freq": freq[i],
                 "root_path": paths[i],
                 "data_path": files[i],
-                "use_4782": False,
+                "use_4782": True,
                 }
         
 
