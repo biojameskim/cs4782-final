@@ -2,6 +2,7 @@ import numpy as np
 import pytorch_lightning as pl
 import torch.nn as nn
 import torch
+import os
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor, ModelSummary
@@ -150,13 +151,14 @@ if __name__ == '__main__':
     #        # 't', 't']
     # feat_len = [7, ]#321, 862, 21, 7, 7, 
     #            # 7, 7]
-    paths=['./']
-    files=['electricity.csv']
-    freq=['h']
+
+    files=['electricity.csv', 'exchange_rate.csv', 'traffic.csv', 'weather.csv', 'national_illness.csv']
+    paths = ['./datasets'for file in files]
+    freq=['h', 'd', 'h', 't', 'd']
     feat_len=[321]
-    epochs = [100, ]#5, 5, 10, 20, 20, 
+    epochs = [5 for file in files]#5, 5, 10, 20, 20, 
                 #20, 20]
-    batch_size=[16,]# 4, 4, 16, 16, 16, 
+    batch_size=[4 for file in files]# 4, 4, 16, 16, 16, 
                # 128, 128]
 
 
@@ -169,6 +171,7 @@ if __name__ == '__main__':
             seq_len = 96
             target_len = 24
 
+        print(paths[i])
         config = {
                 "seq_len": seq_len,
                 "num_channels": feat_len[i],
@@ -248,7 +251,7 @@ if __name__ == '__main__':
 
         # Set up trainer and fit
         trainer = pl.Trainer(
-            accelerator="cpu",
+            accelerator="mps",
             #devices=[0],
             #strategy="ddp_find_unused_parameters_true",
             precision='32',
