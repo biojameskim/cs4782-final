@@ -61,7 +61,7 @@ class PatchTSTEncoder(nn.Module):
             dim = embedding_dim,
             depth = depth,
             heads = heads,
-            dropout = self.dropout,
+            #dropout = self.dropout, # I think package might have been updated since original code, cause this is no longer an argument
             sandwich_norm = True
         )
 
@@ -102,7 +102,7 @@ class PatchTSTDecoder(nn.Module):
         x = self.dropout(x)
         return x
 
-class PatchTST(nn.Module):
+class PatchTST_4782(nn.Module):
     def __init__(self, seq_len, num_channels, embed_dim, heads, depth, target_seq_size, patch_len=8, dropout=0.0, embed_mode='linear'):
         super().__init__()
 
