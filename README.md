@@ -16,7 +16,6 @@ Our project focused on reproducing and extending two specific components of the 
 ## GitHub Contents
 Our repository is structured as follows:
 
-* `README.md`: Detailed project overview and instructions.
 * `code/`: Re-implementation code and configuration scripts, organized into:
 
   * `PatchTST_self_supervised/`: Pre-training and fine-tuning scripts for the PatchTST model, including support for randomized mask ratios.
