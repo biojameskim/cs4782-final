@@ -5,22 +5,26 @@ CS4782 Deep Learning, Cornell University, Spring 2025
 Angela Cui (ayc62), Vipin Gunda (vg245), James Kim (jjk297), Derek Liu (dtl54), Oliver Lopez (ojl23)
 
 ## Introduction
-This is a project that attempts to re-implement [A Time Series is Worth 64 Words: Long-term Forecasting with Transformers](https://arxiv.org/abs/2211.14730). Transformers face limitations when applied to time series data forecasting, because their self-attention mechanism scales quadratically with sequence length, restricting the model’s ability to learn long-range dependencies efficiently. To address this, the authors propose PatchTST, a Transformer-based model tailored for multivariate time series and self-supervised representation learning based on patching and channel independence, which involves dividing time series into subseries-level patches to capture local semantic information while reducing sequence length and processing each univariate time series separately with shared weights, respectively.
+We re-implement the paper [A Time Series is Worth 64 Words: Long-term Forecasting with Transformers](https://arxiv.org/abs/2211.14730) for efficient long-term time series forecasting. The authors propose PatchTST, a Transformer-based model tailored for multivariate time series and self-supervised representation learning based on patching and channel independence, which involves dividing time series into subseries-level patches to capture local semantic information while reducing sequence length and processing each univariate time series separately with shared weights, respectively.
 
 ## Chosen Result
 Our project focused on reproducing and extending two specific components of the original paper: 
-1) Randomized Mask Ratios in Self-Supervised Learning 
-The self-supervised PatchTST model masks a fixed percentage of patches during pretraining. We explored whether randomizing the mask ratio would encourage robustness and prevent overfitting to a fixed masking pattern. Our hypothesis was that this would yield a stronger self-supervised representation, more adaptable for downstream tasks like forecasting. 
-2) Improved Patch Embeddings via 1D Convolutions 
-In the original architecture, each patch is embedded using a linear projection. We hypothesized that replacing this linear layer with convolutional layers could improve performance by better capturing local temporal dependencies within each patch. Working off the fact that CNNs work well for images, we reasoned that by convolving before flattening, the model may gain richer semantic information, potentially improving both representation quality and downstream forecasting accuracy.
-![Alt text](results/chosen-results/chosen-result.png)
+1) **Randomized Mask Ratios in Self-Supervised Learning**: The self-supervised PatchTST model masks a fixed percentage of patches during pretraining, and we explored whether randomizing the mask ratio would encourage robustness and prevent overfitting to a fixed masking pattern.
+2) **Improved Patch Embeddings via 1D Convolutions**: In the original architecture, each patch is embedded using a linear projection, but we hypothesized that replacing this linear layer with convolutional layers could improve performance by better capturing local temporal dependencies within each patch, potentially improving both representation quality and downstream forecasting accuracy.
+![Figures](results/chosen-results/chosen-result.png)
 
 ## GitHub Contents
-All of the code is in the [Code Folder](https://github.com/biojameskim/timeseries-transformer/tree/main/code). We split it up into two folders:
+Our repository is structured as follows:
 
-1) PatchTST_self_supervised contains pre-training and fine-tuning scripts for the PatchTST model, including the randomized mask ratio. 
+* `README.md`: Detailed project overview and instructions.
+* `code/`: Re-implementation code and configuration scripts, organized into:
 
-2) embed_notes includes code for embedding time series data. This folder includes the 1D convolutional patch embeddings improvements. 
+  * `PatchTST_self_supervised/`: Pre-training and fine-tuning scripts for the PatchTST model, including support for randomized mask ratios.
+  * `embed_notes/`: Code for embedding time series data, featuring improvements using 1D convolutional patch embeddings.
+* `data/`: README explaining how to obtain datasets.
+* `results/`: Generated figures, tables, or logs.
+* `poster/`: PDF of the in-class presentation poster.
+* `report/`: PDF of the final written report.
 
 ## Re-implementation Details
 
@@ -67,4 +71,4 @@ The script output will be dumped in ``code/PatchTST_self_supervised/run.logs``. 
 [2] Y. Nie, N. H. Nguyen, P. Sinthong, and J. Kalagnanam, “A Time Series is Worth 64 Words: Long-term Forecasting with Transformers,” in Proc. Int. Conf. Learn. Representations (ICLR), 2023.
 
 ## Acknowledgements
-Credits to Autoformer for the [Time Series Dataset](https://drive.google.com/drive/folders/1ZOYpTUa82_jCcxIdTmyr0LXQfvaM9vIy), and to the Cornell CS4782 Course staff for providing the [Time Series Paper](https://arxiv.org/abs/2211.14730) to complete this project as part of Intro to Deep Learning.
+We want to thank the original authors for [PatchTST](https://arxiv.org/abs/2211.14730), Autoformer for the [Time Series Dataset](https://drive.google.com/drive/folders/1ZOYpTUa82_jCcxIdTmyr0LXQfvaM9vIy), and professors Kilian Weinberger and Jennifer Sun for their guidance and humor.
