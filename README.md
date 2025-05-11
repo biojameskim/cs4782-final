@@ -54,6 +54,24 @@ The datasets ``etth1`` and ``etth2`` are already downloaded in ``code/PatchTST_s
 
 The script output will be dumped in ``code/PatchTST_self_supervised/run.logs``. The performance of the model will be in ``code/PatchTST_self_supervised/saved_models/etth2/masked_patchtst/based_model`` and ``code/PatchTST_self_supervised/saved_models/etth1/masked_patchtst/based_model``. The data for fixed mask ratio experiments is dumped in the csv files labeled with ``model1`` and the data for random mask ratio experiments is dumped in files labeled ``model2``.
 
+
+### Embedding experiments
+First, install the requirements. These should not conflict with the requirements from the self-supervised experiment, but they do add in a few new ones.
+
+```bash
+% cd code/embed_modes
+% pip install -r requirements.txt
+```
+
+Any datasets from Autoformer (linked above) can be used. The csv's should be downloaded and then simply placed in a directory called "datasets." In order to run the experiments, the only file that should be altered is train_supervised.py. The other files can adapt and handle a variety of configurations from train_supervised.py. The 'config' dictionary lists all of the tunable parameters for both the model and dictionary. Changing a value in this dictionary is all that needs to be done to adapt the training run. Most of the options are self-explanatory. One that we added was 'use_4782.' When true, this uses our implementation of the model, and when False, uses the original. You can start training by running the file: 
+
+```bash
+% python train_supervised.py
+```
+
+Lastly, logging is handled by pytorch-lightning. All metrics from the training run are dumped into the directory 'lightning logs.' In addition, the original also uses wandb for logging. However, this involves more complicated setup, so we did not use it in our project.
+
+
 ## Results/Insights
 ![Alt text](results/figure3_masking.png)
 
