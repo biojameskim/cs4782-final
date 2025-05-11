@@ -10,14 +10,30 @@ Angela Cui (ayc62), Vipin Gunda (vg245), James Kim (jjk297), Derek Liu (dtl54), 
 This is a project that attempts to re-implement the time series paper listed above. Transformers face limitations when applied to time series data forecasting, because their self-attention mechanism scales quadratically with sequence length, restricting the model’s ability to learn long-range dependencies efficiently. To address this, the authors propose PatchTST, a Transformer-based model tailored for multivariate time series and self-supervised representation learning based on patching and channel independence, which involves dividing time series into subseries-level patches to capture local semantic information while reducing sequence length and processing each univariate time series separately with shared weights, respectively.
 
 ## Chosen Result
+Our project focused on reproducing and extending two specific components of the original paper: 
+1) Randomized Mask Ratios in Self-Supervised Learning 
+The self-supervised PatchTST model masks a fixed percentage of patches during pretraining. We explored whether randomizing the mask ratio would encourage robustness and prevent overfitting to a fixed masking pattern. Our hypothesis was that this would yield a stronger self-supervised representation, more adaptable for downstream tasks like forecasting. 
+2) Improved Patch Embeddings via 1D Convolutions 
+In the original architecture, each patch is embedded using a linear projection. We hypothesized that replacing this linear layer with convolutional layers could improve performance by better capturing local temporal dependencies within each patch. Working off the fact that CNNs work well for images, we reasoned that by convolving before flattening, the model may gain richer semantic information, potentially improving both representation quality and downstream forecasting accuracy.
+![Alt text](results/chosen-results/chosen-result.png)
 
 ## GitHub Contents
+All of the code is in the [Code Folder](https://github.com/biojameskim/timeseries-transformer/tree/main/code). We split it up into two folders:
+
+1) PatchTST_self_supervised contains pre-training and fine-tuning scripts for the PatchTST model, including the randomized mask ratio. 
+
+2) embed_notes includes code for embedding time series data. This folder includes the 1D convolutional patch embeddings improvements. 
 
 ## Re-implementation Details
 
 ### Self-supervised Experiment with Masking Ratio
 We implemented an extension to the [PatchTST self-supervised model](https://github.com/yuqinie98/PatchTST/tree/204c21efe0b39603ad6e2ca640ef5896646ab1a9) which uses a randomized mask ratio between 0.2 and 0.6 during each forward pass. For every batch, a new mask ratio was uniformly sampled from this range and used to randomly select a proportion of patch embeddings to be masked. These masked patches were then replaced with learnable mask tokens, and the model was trained to reconstruct the original values. Aside from this randomized masking strategy, all other aspects of the pretraining and evaluation process—such as loss functions, optimizer settings, and downstream fine-tuning—remained consistent with the original PatchTST setup. Since the task was to reconstruct the missing patches, no attention rescaling or architectural modifications were required. We evaluated the MSE, MAE, and training and validation losses using the ETTH1 and ETTH2 datasets. 
 
+### Context Window and Transformer Architecture
+Due to computational resource constraints, we used a smaller context window and a reduced-size Transformer architecture. While this scaled-down model is supported by the original paper for ablation studies and efficiency comparisons, the full model is used in the paper to achieve state-of-the-art results. Similarly, we trained for a limited number of epochs—20 for pretraining, 10 for linear probing, and 20 for full fine-tuning—whereas the original paper trains on the order of 100 epochs. Our goal was to evaluate the effects of randomized masking rather than to reproduce the highest possible benchmark performance.
+
+### Embedding Strategy
+Similarly, our investigation of the embedding strategy largely followed the existing structure from [2]. We used the same Transformer architecture across experiments (after reinitializing the weights) in order to compare the effectiveness against a consistent baseline. The model was trained from scratch on each dataset using a linear layer, as in the original paper, and then trained from scratch with two convolutional layers. We used a fixed kernel_size of 3 with a hidden layer of 8 channels, and an output layer of 32 channels. ReLu was applied to the activations of each layer. While this is only a small subset of reasonable configurations, we were not able to explore other options since full experiments could take several hours.
 
 ## Reproduction Steps
 
