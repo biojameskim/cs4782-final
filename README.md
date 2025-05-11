@@ -7,6 +7,7 @@ CS4782 Deep Learning, Cornell University, Spring 2025
 Angela Cui (ayc62), Vipin Gunda (vg245), James Kim (jjk297), Derek Liu (dtl54), Oliver Lopez (ojl23)
 
 ## Introduction
+Transformers face limitations when applied to time series data forecasting, because their self-attention mechanism scales quadratically with sequence length, restricting the model’s ability to learn long-range dependencies efficiently. To address this, the authors propose PatchTST, a Transformer-based model tailored for multivariate time series and self-supervised representation learning based on patching and channel independence, which involves dividing time series into subseries-level patches to capture local semantic information while reducing sequence length and processing each univariate time series separately with shared weights, respectively.
 
 ## Chosen Result
 
