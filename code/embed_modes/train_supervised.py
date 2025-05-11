@@ -196,6 +196,7 @@ if __name__ == '__main__':
                 "root_path": paths[i],
                 "data_path": files[i],
                 "use_4782": True,
+                "accelerator": "cpu"
                 }
         
 
@@ -252,7 +253,7 @@ if __name__ == '__main__':
 
         # Set up trainer and fit
         trainer = pl.Trainer(
-            accelerator="cpu",
+            accelerator=config["accelerator"],
             #devices=[0],
             #strategy="ddp_find_unused_parameters_true",
             precision='32',
